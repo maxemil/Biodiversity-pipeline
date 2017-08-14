@@ -48,7 +48,7 @@ process checkChimeras {
   file "${seqs.baseName}.chimeras" into seqs_chim
 
   publishDir "${workflow.launchDir}/${params.output_directory}", mode: 'copy'
-
+  
   script:
   """
   $workflow.projectDir/binaries/vsearch --uchime_ref $seqs \
