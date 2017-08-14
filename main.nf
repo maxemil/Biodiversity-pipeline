@@ -28,10 +28,10 @@ process buildDatabase {
 
   script:
   """
-  /local/one/people/MaxEmil/Biodiversity/malt/malt-build --input $references \
+  /usr/local/malt/malt-build --input $references \
                                           --sequenceType DNA \
                                           --index REFDB \
-                                          --acc2taxonomy $workflow.projectDir/nucl_acc2tax-May2017.abin \
+                                          --acc2taxonomy /usr/local/megan/nucl_acc2tax-May2017.abin \
                                           -fwo --threads 20
   #/usr/local/malt/malt-build
   """
@@ -48,13 +48,13 @@ process checkChimeras {
   file "${seqs.baseName}.chimeras" into seqs_chim
 
   publishDir "${workflow.launchDir}/${params.output_directory}", mode: 'copy'
-  
+
   script:
   """
-  $workflow.projectDir/binaries/vsearch --uchime_ref $seqs \
-                                        --db $reference_sequences \
-                                        --nonchimeras ${seqs.baseName}.nochimeras \
-                                        --chimeras ${seqs.baseName}.chimeras
+  vsearch --uchime_ref $seqs \
+          --db $reference_sequences \
+          --nonchimeras ${seqs.baseName}.nochimeras \
+          --chimeras ${seqs.baseName}.chimeras
   """
 }
 
@@ -72,7 +72,7 @@ process classifySequences {
 
   script:
   """
-  /local/one/people/MaxEmil/Biodiversity/malt/malt-run --mode BlastN \
+  /usr/local/malt/malt-run --mode BlastN \
                                             --inFile $seqs \
                                             --index REFDB \
                                             --output ${seqs.baseName}.rma \
@@ -119,7 +119,7 @@ process funGuild {
   script:
   """
   sed -i 's/\\t.*\\[K/\\tK/g;s/\\]\\ /__/g;s/\\ \\[//g' $assignments
-  python2 /local/one/people/MaxEmil/MacExchange/scripts/FUNGuild-master/Guilds_v1.0.py \
+  python /usr/local/bin/Guilds_v1.1.py \
         -otu $assignments \
         -db fungi
   """
@@ -137,10 +137,10 @@ process clusterSequences {
 
   script:
   """
-  $workflow.projectDir/binaries/vsearch --cluster_fast $seqs \
-                                        --id 0.97 \
-                                        --sizeorder \
-                                        --uc ${seqs.baseName}.uc
+  vsearch --cluster_fast $seqs \
+          --id 0.97 \
+          --sizeorder \
+          --uc ${seqs.baseName}.uc
   grep -v '^C' Endophytes.uc| cut -f 2,9 | sort -n > motu_info.txt
   cut -f2 motu_info.txt | sort > sequence_names.txt
   """
@@ -158,7 +158,7 @@ process spacedWordDistances {
 
   script:
   """
-  $workflow.projectDir/binaries/spaced -o ${seqs.baseName}.dist $seqs
+  spaced -o ${seqs.baseName}.dist $seqs
   """
 }
 
