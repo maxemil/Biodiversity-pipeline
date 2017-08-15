@@ -9,8 +9,8 @@ def atoi(text):
 def natural_keys(text):
     return [ atoi(c) for c in re.split('(\\d+)', text) ]
 
-motus = pd.read_csv("motu_info.txt", sep='\t', names=['MOTU', 'ID'], dtype=str)
-ecology = pd.read_csv("$environment", sep='\t', names=['ID', 'Ecology'], dtype=str)
+motus = pd.read_csv("motu_info.txt", sep='\\t', names=['MOTU', 'ID'], dtype=str)
+ecology = pd.read_csv("$environment", sep='\\t', names=['ID', 'Ecology'], dtype=str)
 
 merged = pd.merge(motus, ecology, on='ID')
 merged['count'] = 1
@@ -24,4 +24,4 @@ MOTUs = list(set(merged['MOTU']))
 MOTUs.sort(key=natural_keys)
 
 sorted_df = pivoted_table.reindex_axis(MOTUs, axis=1)
-sorted_df.to_csv("aggregate.sample", sep='\t')
+sorted_df.to_csv("aggregate.sample", sep='\\t')

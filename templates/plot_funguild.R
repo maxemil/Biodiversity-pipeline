@@ -2,7 +2,7 @@
 
 ########### Guilds #######################
 samples = read.csv("$funguild",
-                    header=F, sep="\t", row.names=NULL,
+                    header=F, sep="\\t", row.names=NULL,
                     col.names=c("Guild", "Count"))
 
 samples = samples[order(samples\$Count),]

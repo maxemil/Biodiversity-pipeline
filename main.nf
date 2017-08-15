@@ -140,7 +140,7 @@ process clusterSequences {
           --id 0.97 \
           --sizeorder \
           --uc ${seqs.baseName}.uc
-  grep -v '^C' Endophytes.uc| cut -f 2,9 | sort -n > motu_info.txt
+  grep -v '^C' ${seqs.baseName}.uc| cut -f 2,9 | sort -n > motu_info.txt
   cut -f2 motu_info.txt | sort > sequence_names.txt
   """
 }
@@ -218,8 +218,6 @@ process parseFunGuild {
 
   output:
   file "${funguild.baseName}" into parsed_funguild
-
-  publishDir "${workflow.launchDir}/${params.output_directory}", mode: 'copy'
 
   script:
   template "parse_funguild.py"

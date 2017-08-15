@@ -38,4 +38,4 @@ for m1 in motu.keys():
 motus = ["MOTU_%s" % i for i in range(0,len(motu))]
 species_mat = pd.DataFrame(species_mat, columns=motus, index=motus)
 
-species_mat.to_csv("${seqs_dist.baseName}_MOTU.dist" , sep='\t')
+species_mat.to_csv("${seqs_dist.baseName}_MOTU.dist" , sep='\\t')

@@ -2,8 +2,8 @@
 library(picante)
 library(vegan)
 
-sample.dat = read.csv('aggregate.sample', sep='\t', header=TRUE, row.names=1)
-dist.dat = read.csv('MOTU.dist', sep='\t', header=TRUE, row.names=1)
+sample.dat = read.csv('aggregate.sample', sep='\\t', header=TRUE, row.names=1)
+dist.dat = read.csv('MOTU.dist', sep='\\t', header=TRUE, row.names=1)
 
 ######## Phylogenetic Community Measures ###########
 ses.mntd(sample.dat, dist.dat, null.model="sample.pool", runs=9999, iterations=1000, abundance.weighted=FALSE)
