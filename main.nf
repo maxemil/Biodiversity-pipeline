@@ -33,7 +33,6 @@ process buildDatabase {
                                           --index REFDB \
                                           --acc2taxonomy /usr/local/megan/nucl_acc2tax-May2017.abin \
                                           -fwo --threads 20
-  #/usr/local/malt/malt-build
   """
 }
 
@@ -204,9 +203,37 @@ process phylogeneticCommunityAnalysis {
   output:
   file 'ecology_diversity.pdf' into diversity_pdf
   file 'venn.tiff' into venn_tiff
+  file 'species_accumulation.pdf' into accumulation_pdf
 
   publishDir "${workflow.launchDir}/${params.output_directory}", mode: 'copy'
 
   script:
   template "phylogenetic_community.R"
+}
+
+
+process parseFunGuild {
+  input:
+  file funguild from sequence_guilds
+
+  output:
+  file "${funguild.baseName}" into parsed_funguild
+
+  publishDir "${workflow.launchDir}/${params.output_directory}", mode: 'copy'
+
+  script:
+  template "parse_funguild.py"
+}
+
+process funGuildPlot {
+  input:
+  file funguild from parsed_funguild
+
+  output:
+  file "${funguild}.pdf" into funguild_plot
+
+  publishDir "${workflow.launchDir}/${params.output_directory}", mode: 'copy'
+
+  script:
+  template "plot_funguild.R"
 }

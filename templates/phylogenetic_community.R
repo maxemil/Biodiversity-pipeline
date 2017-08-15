@@ -27,3 +27,13 @@ if (length(rownames(sample.dat)) < 5 ) {
                 scaled = FALSE,
                 filename='venn.tiff')
 }
+
+####### species accumulation curve ########
+pdf('species_accumulation.pdf',height=10,width=10)
+	plot(specaccum(sample.dat,method='random', permutations = 100),
+								ci.col="red",
+								ylab='Number of species',
+								xlim=c(1,length(rownames(sample.dat))),
+								cex.lab=1.4, cex.axis=1.4,
+								xaxp=c(0,length(rownames(sample.dat)),1))
+dev.off()

@@ -42,3 +42,13 @@ nextflow run maxemil/Biodiversity-pipeline --input_fasta input.fasta \
   * vegan
   * picante
   * VennDiagram
+
+## Testing
+* To run an example analysis and check if the results are as expected, run
+```
+nextflow run maxemil/Biodiversity-pipeline --input_fasta test/input.fasta \
+                      --reference_sequences test/references.fasta \
+                      --environment_information test/ecology.tab \
+                      --output_directory test/output \
+                      -with-singularity maxemil-Biodiversity-pipeline-master.img
+```
