@@ -212,6 +212,7 @@ process phylogeneticCommunityAnalysis {
   file 'ecology_diversity.pdf' into diversity_pdf
   file 'venn.tiff' into venn_tiff
   file 'species_accumulation.pdf' into accumulation_pdf
+  file 'phylocom.tab' into phlyocom_table
 
   publishDir "${workflow.launchDir}/${params.output_directory}", mode: 'copy'
 
