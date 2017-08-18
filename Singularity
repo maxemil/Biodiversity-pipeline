@@ -43,7 +43,7 @@ chmod +x MALT_unix_0_3_9.sh
 
 
 ######## python ########
-pip install biopython pandas numpy requests
+pip install biopython pandas numpy requests scipy ete3
 
 ######## FUNGuild ########
 cd /usr/local

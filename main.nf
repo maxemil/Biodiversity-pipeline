@@ -91,16 +91,22 @@ process extractTaxonomy {
   file rma from classified_sequences
 
   output:
-  file "${rma.baseName}.assignments" into sequence_taxonomy
+  file "${rma.baseName}.path" into sequence_taxonomy
+  file "${rma.baseName}.species" into sequence_species
 
-  publishDir "${workflow.launchDir}/${params.output_directory}", mode: 'copy'
+  // publishDir "${workflow.launchDir}/${params.output_directory}", mode: 'copy'
 
   script:
   """
-  printf "SequenceID\ttaxonomy\n" > ${rma.baseName}.assignments
+  printf "SequenceID\ttaxonomy\n" > ${rma.baseName}.path
   /usr/local/megan/tools/rma2info -i $rma \
                                   -r2c Taxonomy \
-                                  -p >> ${rma.baseName}.assignments
+                                  -p >> ${rma.baseName}.path
+
+  printf "SequenceID\ttaxonomy\n" > ${rma.baseName}.species
+  /usr/local/megan/tools/rma2info -i $rma \
+                                  -r2c Taxonomy \
+                                  -n >> ${rma.baseName}.species
   """
 }
 
@@ -113,7 +119,7 @@ process funGuild {
   file "${assignments.baseName}.guilds.txt" into sequence_guilds
 
   stageInMode 'copy'
-  publishDir "${workflow.launchDir}/${params.output_directory}", mode: 'copy'
+  // publishDir "${workflow.launchDir}/${params.output_directory}", mode: 'copy'
 
   script:
   """
@@ -123,6 +129,8 @@ process funGuild {
         -db fungi
   """
 }
+sequence_guilds.into{sequence_guilds_plot; sequence_guilds_table}
+
 
 process clusterSequences {
   input:
@@ -132,7 +140,7 @@ process clusterSequences {
   file "motu_info.txt" into motu_info_file
   file "sequence_names.txt" into sequences_names_long
 
-  publishDir "${workflow.launchDir}/${params.output_directory}", mode: 'copy'
+  // publishDir "${workflow.launchDir}/${params.output_directory}", mode: 'copy'
 
   script:
   """
@@ -153,7 +161,7 @@ process spacedWordDistances {
   output:
   file "${seqs.baseName}.dist" into sequence_distances
 
-  publishDir "${workflow.launchDir}/${params.output_directory}", mode: 'copy'
+  // publishDir "${workflow.launchDir}/${params.output_directory}", mode: 'copy'
 
   script:
   """
@@ -161,7 +169,7 @@ process spacedWordDistances {
   """
 }
 
-motu_info_file.into {motu_info_file_distance ; motu_info_file_samples}
+motu_info_file.into {motu_info_file_distance ; motu_info_file_samples; motu_info_file_table}
 
 process aggregateSpecies {
   input:
@@ -172,7 +180,7 @@ process aggregateSpecies {
   output:
   file "${seqs_dist.baseName}_MOTU.dist" into motu_distances
 
-  publishDir "${workflow.launchDir}/${params.output_directory}", mode: 'copy'
+  // publishDir "${workflow.launchDir}/${params.output_directory}", mode: 'copy'
 
   script:
   template "aggregate_species.py"
@@ -187,7 +195,7 @@ process aggregateSamples {
   output:
   file "aggregate.sample" into aggregate_samples
 
-  publishDir "${workflow.launchDir}/${params.output_directory}", mode: 'copy'
+  // publishDir "${workflow.launchDir}/${params.output_directory}", mode: 'copy'
 
   script:
   template "aggregate_samples.py"
@@ -214,7 +222,7 @@ process phylogeneticCommunityAnalysis {
 
 process parseFunGuild {
   input:
-  file funguild from sequence_guilds
+  file funguild from sequence_guilds_plot
 
   output:
   file "${funguild.baseName}" into parsed_funguild
@@ -234,4 +242,19 @@ process funGuildPlot {
 
   script:
   template "plot_funguild.R"
+}
+
+process tabularizeResults {
+  input:
+  file funguild from sequence_guilds_table
+  file motu_info from motu_info_file_table
+  file sequence_species from sequence_species
+
+  output:
+  file "${sequence_species.baseName}.tab" into sequence_table
+
+  publishDir "${workflow.launchDir}/${params.output_directory}", mode: 'copy'
+
+  script:
+  template "tabularize_results.py"
 }
