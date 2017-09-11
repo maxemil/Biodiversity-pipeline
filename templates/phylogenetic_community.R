@@ -6,10 +6,10 @@ sample.dat = read.csv('aggregate.sample', sep='\\t', header=TRUE, row.names=1)
 dist.dat = read.csv('MOTU.dist', sep='\\t', header=TRUE, row.names=1)
 
 ######## Phylogenetic Community Measures ###########
-ses.mntd(sample.dat, dist.dat, null.model="sample.pool", runs=9999, iterations=1000, abundance.weighted=FALSE)
-ses.mpd(sample.dat, dist.dat, null.model="sample.pool", runs=9999, iterations=1000, abundance.weighted=FALSE)
+mntd = ses.mntd(sample.dat, dist.dat, null.model="sample.pool", runs=9999, iterations=1000, abundance.weighted=FALSE)
+mpd = ses.mpd(sample.dat, dist.dat, null.model="sample.pool", runs=9999, iterations=1000, abundance.weighted=FALSE)
 phylocom = cbind(mntd,mpd)
-write.table(phylocom, "phylocom.tab", sep="\t", quote=F, col.names=NA)
+write.table(phylocom, "phylocom.tab", sep='\\t', quote=F, col.names=NA)
 
 ######## Diversity metrics ##########
 rn = renyi(sample.dat, hill=TRUE)
