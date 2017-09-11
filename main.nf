@@ -210,7 +210,7 @@ process phylogeneticCommunityAnalysis {
 
   output:
   file 'ecology_diversity.pdf' into diversity_pdf
-  file 'venn.tiff' into venn_tiff
+  file 'venn.tiff' optional true into venn_tiff
   file 'species_accumulation.pdf' into accumulation_pdf
   file 'phylocom.tab' into phlyocom_table
 
