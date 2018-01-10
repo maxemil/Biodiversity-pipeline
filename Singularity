@@ -62,22 +62,24 @@ make install
 
 ######## R ########
 wget https://cran.r-project.org/src/contrib/picante_1.6-2.tar.gz
-wget https://cran.r-project.org/src/contrib/vegan_2.4-3.tar.gz
+wget https://cran.r-project.org/src/contrib/vegan_2.4-5.tar.gz
 wget https://cran.r-project.org/src/contrib/permute_0.9-4.tar.gz
-wget https://cran.r-project.org/src/contrib/ape_4.1.tar.gz
+wget https://cran.r-project.org/src/contrib/ape_5.0.tar.gz
 wget https://cran.r-project.org/src/contrib/futile.logger_1.4.3.tar.gz
 wget https://cran.r-project.org/src/contrib/futile.options_1.0.0.tar.gz
-wget https://cran.r-project.org/src/contrib/lambda.r_1.1.9.tar.gz
-wget https://cran.r-project.org/src/contrib/VennDiagram_1.6.17.tar.gz
+wget https://cran.r-project.org/src/contrib/lambda.r_1.2.tar.gz
+wget https://cran.r-project.org/src/contrib/VennDiagram_1.6.18.tar.gz
+wget https://cran.r-project.org/src/contrib/Rcpp_0.12.14.tar.gz
 
 R CMD INSTALL permute_0.9-4.tar.gz \
-              ape_4.1.tar.gz \
-              vegan_2.4-3.tar.gz \
+              Rcpp_0.12.14.tar.gz \
+              ape_5.0.tar.gz \
+              vegan_2.4-5.tar.gz \
               picante_1.6-2.tar.gz \
-              lambda.r_1.1.9.tar.gz \
+              lambda.r_1.2.tar.gz \
               futile.options_1.0.0.tar.gz \
               futile.logger_1.4.3.tar.gz \
-              VennDiagram_1.6.17.tar.gz
+              VennDiagram_1.6.18.tar.gz
 
 
 %files
