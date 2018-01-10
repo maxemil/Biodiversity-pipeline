@@ -45,6 +45,7 @@ process checkChimeras {
   output:
   file "${seqs.baseName}.nochimeras" into seqs_nochim
   file "${seqs.baseName}.chimeras" into seqs_chim
+  file "${seqs.baseName}.borderline" into seqs_bord
 
   publishDir "${workflow.launchDir}/${params.output_directory}", mode: 'copy'
 
@@ -52,6 +53,7 @@ process checkChimeras {
   """
   vsearch --uchime_ref $seqs \
           --db $reference_sequences \
+          --borderline ${seqs.baseName}.borderline \
           --nonchimeras ${seqs.baseName}.nochimeras \
           --chimeras ${seqs.baseName}.chimeras
   """
