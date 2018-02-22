@@ -17,7 +17,7 @@ startup_message()
 
 Channel.from(file(params.reference_sequences)).into { reference_sequences_taxonomy ; reference_sequences_chimera }
 input_sequences = Channel.from(file(params.input_fasta))
-environment_information = Channel.from(file(params.environment_information))
+Channel.from(file(params.environment_information)).into { environment_information; environment_information_table }
 
 process buildDatabase {
   input:
@@ -32,7 +32,7 @@ process buildDatabase {
                                           --sequenceType DNA \
                                           --index REFDB \
                                           --acc2taxonomy /usr/local/megan/nucl_acc2tax-May2017.abin \
-                                          -fwo --threads 20
+                                          -fwo --threads 4
   """
 }
 
@@ -77,7 +77,7 @@ process classifySequences {
                                             --inFile $seqs \
                                             --index REFDB \
                                             --output ${seqs.baseName}.rma \
-                                            -t 20 --verbose
+                                            -t 4 --verbose
                                             # \
                                             # --topPercent 2 -wlca
                                             # --alignments ${seqs.baseName}.txt \
@@ -112,10 +112,11 @@ process extractTaxonomy {
   """
 }
 
+sequence_taxonomy.into {sequence_taxonomy_funguild; sequence_taxonomy_table }
 
 process funGuild {
   input:
-  file assignments from sequence_taxonomy
+  file assignments from sequence_taxonomy_funguild
 
   output:
   file "${assignments.baseName}.guilds.txt" into sequence_guilds
@@ -131,6 +132,7 @@ process funGuild {
         -db fungi
   """
 }
+
 sequence_guilds.into{sequence_guilds_plot; sequence_guilds_table}
 
 
@@ -252,7 +254,9 @@ process tabularizeResults {
   file funguild from sequence_guilds_table
   file motu_info from motu_info_file_table
   file sequence_species from sequence_species
-
+  file taxonomy from sequence_taxonomy_table
+  file environment from environment_information_table
+  
   output:
   file "${sequence_species.baseName}.tab" into sequence_table
 
